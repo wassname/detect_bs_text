@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+description = "building a BS detector using perplexity"
+authors = ["wassname <git@wassname.org>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+torch = {version = "^2.1.0+cu118", source = "pytorch"}
+tqdm = "^4.66.1"
+datasets = "^2.14.5"
+transformers = "4.34.0"
+optimum = "^1.13.2"
+numpy = "^1.26.1"
+pandas = "^2.1.1"
+scikit-learn = "^1.3.1"
+bitsandbytes = "^0.41.3.post2"
+packaging = "^23.2"
+peft = "^0.7.1"
+evaluate = "^0.4.1"
+auto-gptq = "^0.6.0"
+openai = "^1.6.1"
+python-dotenv = "^1.0.0"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "explicit"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.25.2"
+black = "^23.10.0"
+pylama = "^8.4.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
