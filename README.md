@@ -13,4 +13,24 @@ The ideal way to do this would be by fine tuning. But that would be momory inten
 
 If yes/yes then it's may be suprising new information. If either is not true, then it's proboably BS.
 
-See main.ipynb
+See [main.ipynb](main.ipynb) for the code and results.
+
+
+# Results
+
+When using microsoft/phi-2 we get this amount of perplexity reduction by including a summary of the key learnings
+
+|    | sample                                        |    learning% |
+|---:|:----------------------------------------------|-------------:|
+|  3 | einsteins theory of general relativity        |  0.0751468   |
+|  5 | wikipedia on LK-99                            |  0.0674738   |
+|  8 | Schmidhuber 2023 Subjective Novelty, Surprise |  0.0396319   |
+|  1 | good_ml                                       |  0.0321225   |
+|  0 | bad_ml                                        | -9.58801e-05 |
+|  2 | sokal hoax                                    | -0.0168107   |
+|  7 | AI gen fake paper                             | -0.134864    |
+|  4 | lorem ipsum                                   | -0.69694     |
+|  6 | I have a dream                                | -0.796421    |
+
+
+As you can see, some of these are probobly in the training set
