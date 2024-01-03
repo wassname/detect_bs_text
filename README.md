@@ -16,7 +16,33 @@ If yes/yes then it's may be suprising new information. If either is not true, th
 See [main.ipynb](main.ipynb) for the code and results.
 
 
-# Results
+# Results using adapter fine tuning
+
+I fine tuned the model on the first half of a text, then tested on the second half. I measure how much it learned by the perplexity decrease. The rows with a high perplexity are unpredictable, and the ones with a higher improvement are learnable. Unpredictable and learnable text is not BS.
+
+
+| name                                          |   before |    after | in_training   |   len |   improvement% |   improvement |
+|:----------------------------------------------|---------:|---------:|:--------------|------:|---------------:|--------------:|
+| wikipedia on LK-99                            | 32.219   | 28.8525  | False         |  1038 |     0.104489   |    3.36652    |
+| Theory o. general relativity                  | 26.952   | 24.5425  | True          |  1378 |     0.0894     |    2.40951    |
+| good_ml                                       | 28.3473  | 26.4566  | False         |  1004 |     0.0666997  |    1.89076    |
+| enron_email1                                  | 25.7697  | 24.3904  | True          |   445 |     0.0535253  |    1.37933    |
+| openai_board_ann                              | 15.904   | 15.1736  | False         |  1191 |     0.0459214  |    0.730332   |
+| Schmidhuber 2023 Subjective Novelty, Surprise | 29.615   | 28.4708  | False         |  2654 |     0.0386353  |    1.14418    |
+| email_to_fauci                                | 25.0893  | 24.3714  | False         |  1559 |     0.0286154  |    0.717941   |
+| sokal hoax                                    | 15.9664  | 15.7148  | True          |  2487 |     0.0157617  |    0.251658   |
+| AI gen fake paper                             |  7.63283 |  7.57951 | False         |  2031 |     0.00698672 |    0.0533285  |
+| lorem ipsum                                   |  1.60166 |  1.59538 | True          |   445 |     0.00392053 |    0.00627935 |
+| bad_ml                                        | 13.9061  | 13.8623  | False         |  2345 |     0.00314972 |    0.0438004  |
+| I have a dream                                |  2.12726 |  2.12344 | True          |   848 |     0.00179583 |    0.00382018 |
+
+
+For example the wikipedia extract `wikipedia on LK-99 ` is unpredictable (high before perplexity) and is learnable (high improvement in perplexity). That makes sense as it's a new topic. In contrast `lorem ipsum` has a low perplexity, meaning it's predictalbe or memorizable. That makes sense as this text was likely in the training corpus. The `AI gen fake paper ` has a low perplexity because it's predictable, even thought it is new. 
+
+
+See more in [01_detection_using_adapter_ft.ipynb](01_detection_using_adapter_ft.ipynb)
+
+# Results using prompting
 
 When using microsoft/phi-2 we get this amount of perplexity reduction by including a summary of the key learnings
 
@@ -34,6 +60,8 @@ When using microsoft/phi-2 we get this amount of perplexity reduction by includi
 
 
 As you can see, some of these are probobly in the training set
+
+See more in [02_detection_using_tldr_prompt.ipynb](02_detection_using_tldr_prompt.ipynb)
 
 # Citing
 
