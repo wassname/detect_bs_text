@@ -1,5 +1,6 @@
 .env
 lightning_logs/
+outputs/
 
 *.arrow
 squad_*

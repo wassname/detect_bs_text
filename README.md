@@ -34,3 +34,19 @@ When using microsoft/phi-2 we get this amount of perplexity reduction by includi
 
 
 As you can see, some of these are probobly in the training set
+
+# Citing
+
+If you like our work and end up using this code for your reseach give us a shout-out by citing or acknowledging
+
+```
+@misc{wassname2024,
+  author = {Clark, M.J.},
+  title = {BS Writing Detector},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/wassname/detect_bs_text}},
+  commit = {}
+}
+```
