@@ -1,76 +1,89 @@
-# Experiment using LLM's to detect BS writing
+# Identifying Low-Quality Textual Content using LLMs
+
+We explore the feasibility of utilizing Large Language Models (LLMs) to identify 'BS'—text that is of low quality or lacks meaningful content. While recognizing the inherent challenges in detecting AI-generated text with absolute certainty, this research focuses on the more attainable goal of identifying text that is substantively empty or devoid of content.
 
 
-An experiment to see if I can detect "BS" using LLM's in a robust way.
+## Theoretical Underpinnings
 
-It's impossible to detect AI generated text with 100% accuracy. But we will have more success detecting bad, empty, or contentless text. 
-
-Why might this work? As with [Schmidhuber's definition of curiosity](https://arxiv.org/abs/0812.4360) good writing should initially suprise the reader but become less suprising as they learn about it. Empty writing is not suprising. And confusing writing stays confusing even after you have read it. In other words it should have a high perplexity, which goes down after learning it. 
-
-The ideal way to do this would be by fine tuning. But that would be momory intensive so I will try and do it with prompts. I ask:
-- Is the text suprising (high perplexity)
-- Is less suprising when given a summary? (low perplexity)
-
-If yes/yes then it's may be suprising new information. If either is not true, then it's proboably BS.
-
-See [main.ipynb](main.ipynb) for the code and results.
+The hypothesis is grounded in [Schmidhuber's concept of curiosity](https://arxiv.org/abs/0812.4360), which posits that engaging writing should initially provoke surprise in the reader, with the level of surprise diminishing as comprehension increases. Conversely, vacuous writing fails to evoke surprise, while perplexing writing remains consistently bewildering. This study posits that such qualities can be quantitatively assessed through the metric of perplexity, which should decrease as the reader's understanding of the text improves.
 
 
-# Results using adapter fine tuning
+## Methodological Approach
 
-I fine tuned the model on the first half of a text, then tested on the second half. I measure how much it learned by the perplexity decrease. The rows with a high perplexity are unpredictable, and the ones with a higher improvement are learnable. Unpredictable and learnable text is not BS.
+Ideally, one would employ fine-tuning techniques to tailor the model for this specific task. However, due to the substantial memory requirements of such methods, this study opts for a less resource-intensive approach, utilizing prompts to gauge:
+- The initial perplexity of the text (indicative of surprise).
+- The change in perplexity upon providing a summary (indicative of learnability).
 
+Text that scores high on both counts is hypothesized to contain novel and potentially valuable information, whereas text that does not is likely of lower quality.
 
-| name                                          |   before |    after | in_training   |   len |   improvement% |   improvement |
-|:----------------------------------------------|---------:|---------:|:--------------|------:|---------------:|--------------:|
-| wikipedia on LK-99                            | 32.219   | 28.8525  | False         |  1038 |     0.104489   |    3.36652    |
-| Theory o. general relativity                  | 26.952   | 24.5425  | True          |  1378 |     0.0894     |    2.40951    |
-| good_ml                                       | 28.3473  | 26.4566  | False         |  1004 |     0.0666997  |    1.89076    |
-| enron_email1                                  | 25.7697  | 24.3904  | True          |   445 |     0.0535253  |    1.37933    |
-| openai_board_ann                              | 15.904   | 15.1736  | False         |  1191 |     0.0459214  |    0.730332   |
-| Schmidhuber 2023 Subjective Novelty, Surprise | 29.615   | 28.4708  | False         |  2654 |     0.0386353  |    1.14418    |
-| email_to_fauci                                | 25.0893  | 24.3714  | False         |  1559 |     0.0286154  |    0.717941   |
-| sokal hoax                                    | 15.9664  | 15.7148  | True          |  2487 |     0.0157617  |    0.251658   |
-| AI gen fake paper                             |  7.63283 |  7.57951 | False         |  2031 |     0.00698672 |    0.0533285  |
-| lorem ipsum                                   |  1.60166 |  1.59538 | True          |   445 |     0.00392053 |    0.00627935 |
-| bad_ml                                        | 13.9061  | 13.8623  | False         |  2345 |     0.00314972 |    0.0438004  |
-| I have a dream                                |  2.12726 |  2.12344 | True          |   848 |     0.00179583 |    0.00382018 |
+We found that this approach only works for model of sufficient ability. Phi-2 (2B parameters) is the smallest current model we found that works. 
 
 
-For example the wikipedia extract `wikipedia on LK-99 ` is unpredictable (high before perplexity) and is learnable (high improvement in perplexity). That makes sense as it's a new topic. In contrast `lorem ipsum` has a low perplexity, meaning it's predictalbe or memorizable. That makes sense as this text was likely in the training corpus. The `AI gen fake paper ` has a low perplexity because it's predictable, even thought it is new. 
+## Empirical Findings: Adapter Fine Tuning
+
+The model was fine-tuned on the first segment of various texts and then evaluated on the subsequent segment to measure the change in perplexity, which serves as a proxy for the text's learnability and predictability. Texts that exhibit high initial perplexity but show significant improvement are deemed to be both unpredictable and learnable, characteristics not typically associated with low-quality content.
+
+
+| name                                          |  before |   after | text length | improvement % | abs improvement | novel? | learnable? | High Quality?   |
+| :-------------------------------------------- | ------: | ------: | ----------: | ------------: | --------------: | :----- | :--------- | :---- |
+| wikipedia on LK-99                            |  32.219 | 28.8525 |        1038 |      0.104489 |         3.36652 | True   | True       | False |
+| good_ml                                       | 28.3473 | 26.4566 |        1004 |     0.0666997 |         1.89076 | True   | True       | False |
+| openai_board_ann                              |  15.904 | 15.1736 |        1191 |     0.0459214 |        0.730332 | True   | True       | True  |
+| Schmidhuber 2023 Subjective Novelty, Surprise |  29.615 | 28.4708 |        2654 |     0.0386353 |         1.14418 | True   | True       | False |
+| email_to_fauci                                | 25.0893 | 24.3714 |        1559 |     0.0286154 |        0.717941 | True   | True       | True  |
+| AI gen fake paper                             | 7.63283 | 7.57951 |        2031 |    0.00698672 |       0.0533285 | False  | False      | True  |
+| bad_ml                                        | 13.9061 | 13.8623 |        2345 |    0.00314972 |       0.0438004 | False  | False      | True  |
+
+
+For instance, the Wikipedia extract on 'LK-99' demonstrates high initial perplexity and significant improvement, suggesting it is both novel and learnable—a hallmark of quality content. In contrast, texts like AI-generated papers, which show low perplexity or minimal improvement, are likely predictable or already within the model's training corpus, indicating lower quality.
 
 
 See more in [01_detection_using_adapter_ft.ipynb](01_detection_using_adapter_ft.ipynb)
 
-# Results using prompting
+## Empirical Findings: Prompting with summaries:
 
-When using microsoft/phi-2 we get this amount of perplexity reduction by including a summary of the key learnings
-
-|    | sample                                        |    learning% |
-|---:|:----------------------------------------------|-------------:|
-|  3 | einsteins theory of general relativity        |  0.0751468   |
-|  5 | wikipedia on LK-99                            |  0.0674738   |
-|  8 | Schmidhuber 2023 Subjective Novelty, Surprise |  0.0396319   |
-|  1 | good_ml                                       |  0.0321225   |
-|  0 | bad_ml                                        | -9.58801e-05 |
-|  2 | sokal hoax                                    | -0.0168107   |
-|  7 | AI gen fake paper                             | -0.134864    |
-|  4 | lorem ipsum                                   | -0.69694     |
-|  6 | I have a dream                                | -0.796421    |
+When employing the microsoft/phi-2 model and incorporating summaries, we observed varying degrees of perplexity reduction, further supporting the hypothesis that the ability to summarize and reduce perplexity correlates with text quality.
 
 
-As you can see, some of these are probobly in the training set
+| sample                                        |   before |    after |   improvement |   improvement% | suprising   | summarizable   |
+|:----------------------------------------------|---------:|---------:|--------------:|---------------:|:------------|:---------------|
+| email_to_fauci                                | 21.0603  | 18.5976  |     2.46273   |      0.116937  | True        | True           |
+| wikipedia on LK-99                            | 18.0523  | 16.9282  |     1.12407   |      0.0622675 | True        | True           |
+| openai_board_ann                              |  8.55293 |  7.57201 |     0.980914  |      0.114688  | False       | True           |
+| bad_ml                                        | 12.4567  | 12.2791  |     0.177641  |      0.0142607 | False       | True           |
+| good_ml                                       | 22.6639  | 22.7335  |    -0.0695648 |     -0.0030694 | True        | False          |
+| AI gen fake paper                             |  7.0913  |  7.85388 |    -0.762577  |     -0.107537  | False       | False          |
+| Schmidhuber 2023 Subjective Novelty, Surprise | 28.31    | 29.5579  |    -1.24789   |     -0.0440795 | True        | False          |
+
+
 
 See more in [02_detection_using_tldr_prompt.ipynb](02_detection_using_tldr_prompt.ipynb)
 
-# Citing
 
-If you like our work and end up using this code for your reseach give us a shout-out by citing or acknowledging
+## Installing
+
+```sh
+# somehow get hold of a gpu
+nvidia-smi
+
+# clone the repo
+git clone https://github.com/wassname/detect_bs_text.git
+
+# install the python environment
+poetry install
+
+# add you openai key to the secret .env file
+echo "OPENAI_API_KEY=XXX" > .env
+```
+
+## Citing
+
+If this research contributes to your work, please acknowledge it by citing:
 
 ```
 @misc{wassname2024,
   author = {Clark, M.J.},
-  title = {BS Writing Detector},
+  title = {Identifying Low-Quality Textual Content using LLMs},
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
