@@ -24,15 +24,23 @@ We found that this approach only works for model of sufficient ability. Phi-2 (2
 The model was fine-tuned on the first segment of various texts and then evaluated on the subsequent segment to measure the change in perplexity, which serves as a proxy for the text's learnability and predictability. Texts that exhibit high initial perplexity but show significant improvement are deemed to be both unpredictable and learnable, characteristics not typically associated with low-quality content.
 
 
-| name                                          |  before |   after | text length | improvement % | abs improvement | novel? | learnable? | High Quality?   |
-| :-------------------------------------------- | ------: | ------: | ----------: | ------------: | --------------: | :----- | :--------- | :---- |
-| wikipedia on LK-99                            |  32.219 | 28.8525 |        1038 |      0.104489 |         3.36652 | True   | True       | False |
-| good_ml                                       | 28.3473 | 26.4566 |        1004 |     0.0666997 |         1.89076 | True   | True       | False |
-| openai_board_ann                              |  15.904 | 15.1736 |        1191 |     0.0459214 |        0.730332 | True   | True       | True  |
-| Schmidhuber 2023 Subjective Novelty, Surprise |  29.615 | 28.4708 |        2654 |     0.0386353 |         1.14418 | True   | True       | False |
-| email_to_fauci                                | 25.0893 | 24.3714 |        1559 |     0.0286154 |        0.717941 | True   | True       | True  |
-| AI gen fake paper                             | 7.63283 | 7.57951 |        2031 |    0.00698672 |       0.0533285 | False  | False      | True  |
-| bad_ml                                        | 13.9061 | 13.8623 |        2345 |    0.00314972 |       0.0438004 | False  | False      | True  |
+| title                                     |    before |     after |   len |   improvement% |   improvement | novel   | learnable   | BS    |
+|:------------------------------------------|----------:|----------:|------:|---------------:|--------------:|:--------|:------------|:------|
+| cicero from ibois, Philippe (2012-06-03). |  72.5874  |  67.7442  | 13707 |     0.066722   |     4.84318   | True    | True        | False |
+| politics is the mind-killer               | 247.552   | 245.827   |  3158 |     0.00696722 |     1.72475   | True    | False       | False |
+| openai board ann                          |  55.8085  |  54.6679  |  2991 |     0.0204374  |     1.14058   | True    | True        | False |
+| How to Catch an AI Liar                   |  28.9499  |  28.0088  |  5464 |     0.0325069  |     0.941071  | True    | True        | True  |
+| buzzfeed foi fauci emails 2023            |  23.3094  |  22.4064  | 13640 |     0.0387411  |     0.903032  | True    | True        | True  |
+| Gemini to Q*                              |  11.7564  |  11.1906  | 42604 |     0.0481219  |     0.56574   | False   | True        | True  |
+| LK-99-en                                  |  14.5138  |  14.0661  | 15432 |     0.03085    |     0.447752  | False   | True        | True  |
+| LK-99-es                                  |  11.415   |  10.9729  | 12970 |     0.0387271  |     0.44207   | False   | True        | True  |
+| disney appointment                        | 118.826   | 118.42    |  3653 |     0.003417   |     0.406029  | True    | False       | True  |
+| weak to strong                            |  46.7642  |  46.4047  |  5811 |     0.00768638 |     0.359447  | True    | False       | True  |
+| blechley declaration                      |  17.8691  |  17.5242  |  7762 |     0.0193007  |     0.344887  | True    | False       | True  |
+| Lorem ipsum                               |   6.56484 |   6.26879 | 19649 |     0.0450961  |     0.296049  | False   | True        | True  |
+| statement by whitehouse on passing        |  29.1971  |  28.9397  |  1641 |     0.00881732 |     0.257441  | True    | False       | True  |
+| harvard announcment caplain israel hamas  |  45.3474  |  45.1273  |  4247 |     0.00485323 |     0.220081  | True    | False       | True  |
+| fake ai hoax paper                        |   7.76698 |   7.69723 |  3290 |     0.00898037 |     0.0697503 | False   | False       | True  |
 
 
 For instance, the Wikipedia extract on 'LK-99' demonstrates high initial perplexity and significant improvement, suggesting it is both novel and learnable—a hallmark of quality content. In contrast, texts like AI-generated papers, which show low perplexity or minimal improvement, are likely predictable or already within the model's training corpus, indicating lower quality.
