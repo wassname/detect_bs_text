@@ -1,6 +1,6 @@
 # Identifying Low-Quality Textual Content using LLMs
 
-We explore the feasibility of utilizing Large Language Models (LLMs) to identify 'BS'—text that is of low quality or lacks meaningful content. While recognizing the inherent challenges in detecting AI-generated text with absolute certainty, this research focuses on the more attainable goal of identifying text that is substantively empty or devoid of content.
+Can Large Language Models (LLMs) detect low quality text?. We do this by finding text that can "suprise" the model.
 
 
 ## Theoretical Underpinnings
