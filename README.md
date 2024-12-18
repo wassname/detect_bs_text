@@ -5,7 +5,7 @@ Can Large Language Models (LLMs) detect low quality text?. We do this by finding
 
 ## Theoretical Underpinnings
 
-The hypothesis is grounded in [Schmidhuber's concept of curiosity](https://arxiv.org/abs/0812.4360), which posits that engaging writing should initially provoke surprise in the reader, with the level of surprise diminishing as comprehension increases. Conversely, vacuous writing fails to evoke surprise, while perplexing writing remains consistently bewildering. This study posits that such qualities can be quantitatively assessed through the metric of perplexity, which should decrease as the reader's understanding of the text improves.
+The hypothesis is grounded in [Schmidhuber's concept of curiosity](https://arxiv.org/abs/0812.4360), which suggests that engaging writing should initially provoke surprise in the reader, with the level of surprise diminishing as comprehension increases. We test of these qualities can be quantitatively assessed through the metric of perplexity, which should decrease as the model's understanding of the text improves.
 
 
 ## Methodological Approach
@@ -19,7 +19,7 @@ Text that scores high on both counts is hypothesized to contain novel and potent
 We found that this approach only works for model of sufficient ability. Phi-2 (2B parameters) is the smallest current model we found that works. 
 
 
-## Empirical Findings: Adapter Fine Tuning
+## Empirical Findings: Method 1, Adapter Fine Tuning (succeed)
 
 The model was fine-tuned on the first segment of various texts and then evaluated on the subsequent segment to measure the change in perplexity, which serves as a proxy for the text's learnability and predictability. Texts that exhibit high initial perplexity but show significant improvement are deemed to be both unpredictable and learnable, characteristics not typically associated with low-quality content.
 
@@ -40,7 +40,7 @@ For instance, the Wikipedia extract on 'LK-99' demonstrates high initial perplex
 
 See more in [01_detection_using_adapter_ft.ipynb](01_detection_using_adapter_ft.ipynb)
 
-## Empirical Findings: Prompting with summaries:
+## Empirical Findings: Method 2, Prompting with summaries (fail):
 
 When employing the microsoft/phi-2 model and incorporating summaries, we observed varying degrees of perplexity reduction, further supporting the hypothesis that the ability to summarize and reduce perplexity correlates with text quality.
 
