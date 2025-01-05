@@ -66,9 +66,10 @@ def perplexity_compute(
         ), "When add_start_token=False, each input text must be at least two tokens long. Run with add_start_token=True if inputting strings of only one token, and remove all empty input strings."
 
     ppls = []
+    nlls = []
     loss_fct = CrossEntropyLoss(reduction="none")
 
-    for start_index in logging.tqdm(range(0, len(encoded_texts), batch_size)):
+    for start_index in range(0, len(encoded_texts), batch_size):
         end_index = min(start_index + batch_size, len(encoded_texts))
         encoded_batch = encoded_texts[start_index:end_index]
         attn_mask = attn_masks[start_index:end_index]
@@ -89,11 +90,14 @@ def perplexity_compute(
         shift_labels = labels[..., 1:].contiguous()
         shift_attention_mask_batch = attn_mask[..., 1:].contiguous()
 
-        perplexity_batch = torch.exp(
-            (loss_fct(shift_logits.transpose(1, 2), shift_labels) * shift_attention_mask_batch).sum(1)
-            / shift_attention_mask_batch.sum(1)
+        nll_batch = (
+            (loss_fct(shift_logits.transpose(1, 2), shift_labels) * shift_attention_mask_batch)
         )
+        # remove all the masked ones
+        nll_batch = nll_batch[shift_attention_mask_batch == 1][None, :] # FIXME only for batch_size=1
+        perplexity_batch = torch.exp(nll_batch.mean(1)).cpu().numpy()
 
         ppls += perplexity_batch.tolist()
+        nlls += nll_batch.cpu().numpy().tolist()
 
-    return {"perplexities": ppls, "mean_perplexity": np.mean(ppls)}
+    return {"perplexities": np.array(ppls), "nlls": np.array(nlls)}

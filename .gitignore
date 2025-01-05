@@ -1,6 +1,7 @@
 .env
 lightning_logs/
 outputs/
+.anycache/
 
 *.arrow
 squad_*
