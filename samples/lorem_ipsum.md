@@ -1,6 +1,8 @@
 ---
 title:  Lorem ipsum 
 url: https://www.lipsum.com/feed/html
+novelty: 0.0
+date: 1900-01-01
 ---
  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel commodo turpis, a finibus sem. Aenean tincidunt venenatis justo, nec ullamcorper tortor scelerisque eu. Morbi sed semper justo, mollis consectetur libero. Nam consequat, enim in cursus volutpat, tortor mauris vehicula ex, in eleifend velit quam nec turpis. Sed pellentesque magna et volutpat mollis. Curabitur cursus neque id porta hendrerit. Maecenas condimentum tempor lobortis.
 

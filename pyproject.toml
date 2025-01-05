@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "src"
+name = "bs_writing_detector"
 version = "0.1.0"
 description = "building a BS detector using perplexity"
 authors = ["wassname <git@wassname.org>"]
@@ -11,12 +11,12 @@ python = ">=3.10,<3.13"
 torch = {version = "^2.1.0+cu118", source = "pytorch"}
 tqdm = "^4.66.1"
 datasets = "^2.14.5"
-transformers = "4.34.0"
+transformers = "^4.34.0"
 optimum = "^1.13.2"
 numpy = "^1.26.1"
 pandas = "^2.1.1"
 scikit-learn = "^1.3.1"
-bitsandbytes = "^0.41.3.post2"
+bitsandbytes = ">=0.43.2"
 packaging = "^23.2"
 peft = "^0.7.1"
 evaluate = "^0.4.1"
@@ -29,6 +29,7 @@ lightning = "^2.1.3"
 matplotlib = "^3.8.0"
 python-frontmatter = "^1.0.1"
 loguru = "^0.7.2"
+anycache = "^2.2.0"
 
 [[tool.poetry.source]]
 name = "pytorch"
@@ -44,3 +45,7 @@ pylama = "^8.4.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[virtualenvs]
+create = true
+in-project = true

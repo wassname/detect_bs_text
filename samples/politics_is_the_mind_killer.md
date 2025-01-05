@@ -1,6 +1,8 @@
 ---
 title: politics is the mind-killer
 url: https://www.lesswrong.com/posts/9weLK2AJ9JEt2Tt8f/politics-is-the-mind-killer
+novelty: 0.5
+date: 2007-02-19
 ---
 People go funny in the head when talking about politics. The evolutionary reasons for this are so obvious as to be worth belaboring: In the ancestral environment, politics was a matter of life and death. And sex, and wealth, and allies, and reputation . . . When, today, you get into an argument about whether “we” ought to raise the minimum wage, you’re executing adaptations for an ancestral environment where being on the wrong side of the argument could get you killed. Being on the right side of the argument could let you kill your hated rival!
 
