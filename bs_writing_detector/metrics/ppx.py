@@ -94,6 +94,7 @@ def perplexity_compute(
             (loss_fct(shift_logits.transpose(1, 2), shift_labels) * shift_attention_mask_batch)
         )
         # remove all the masked ones
+        assert nll_batch.size(0) == 1
         nll_batch = nll_batch[shift_attention_mask_batch == 1][None, :] # FIXME only for batch_size=1
         perplexity_batch = torch.exp(nll_batch.mean(1)).cpu().numpy()
 
@@ -101,3 +102,46 @@ def perplexity_compute(
         nlls += nll_batch.cpu().numpy().tolist()
 
     return {"perplexities": np.array(ppls), "nlls": np.array(nlls)}
+
+
+# modified from https://github.dev/huggingface/evaluate/blob/8dfe05784099fb9af55b8e77793205a3b7c86465/measurements/perplexity/perplexity.py#L154
+import evaluate
+from evaluate import logging
+from torch.nn import CrossEntropyLoss
+from torch.utils.data import DataLoader
+
+def perplexity_compute_ds(
+    ds, model, tokenizer, batch_size: int = 16, add_start_token: bool = True, device=None, max_length=None
+):
+    model = model.to(device)
+
+
+    ds = ds.with_format('pt')
+    dl = DataLoader(ds, batch_size=1, shuffle=False, num_workers=0, collate_fn=tokenizer.pad, pin_memory=True)
+
+    ppls = []
+    nlls = []
+    loss_fct = CrossEntropyLoss(reduction="none")
+    for b in dl:
+        input_ids = b['input_ids'].to(device)
+        attention_mask = b['attention_mask'].to(device)
+
+        labels = input_ids
+
+        with torch.no_grad():
+            out_logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
+
+        shift_logits = out_logits[..., :-1, :].contiguous()
+        shift_labels = labels[..., 1:].contiguous()
+        shift_attention_mask_batch = attention_mask[..., 1:].contiguous()
+
+        nll_batch = loss_fct(shift_logits.transpose(1, 2), shift_labels) * shift_attention_mask_batch
+        assert nll_batch.size(0) == 1
+        nll_batch = nll_batch[shift_attention_mask_batch == 1][None, :] # FIXME only for batch_size=1
+
+        perplexity_batch = torch.exp(nll_batch.sum(1) / shift_attention_mask_batch.sum(1)).cpu().numpy()
+
+        ppls += perplexity_batch.tolist()
+        nlls += nll_batch.cpu().numpy().tolist()
+
+    return {"perplexities": torch.tensor(ppls), "mean_perplexity": torch.tensor(ppls).mean(), "nlls": torch.tensor(nlls)}
