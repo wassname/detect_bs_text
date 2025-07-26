@@ -1,5 +1,5 @@
 ---
-title: The Laws of Large Numbers
+title: "The Laws of Large Numbers"
 date: 2025-01-04 18:06:02.387000+00:00
 url: https://www.lesswrong.com/posts/EhTMM77iKBTBxBKRe/the-laws-of-large-numbers
 novelty: 0.5409323783864814

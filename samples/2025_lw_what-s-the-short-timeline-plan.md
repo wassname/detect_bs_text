@@ -1,5 +1,5 @@
 ---
-title: What’s the short timeline plan?
+title: "What’s the short timeline plan?"
 date: 2025-01-05 00:10:28.708000+00:00
 url: https://www.lesswrong.com/posts/bb5Tnjdrptu89rcyY/what-s-the-short-timeline-plan
 novelty: 0.8981608613682581

@@ -1,5 +1,5 @@
 ---
-title: Parkinson's Law and the Ideology of Statistics
+title: "Parkinson's Law and the Ideology of Statistics"
 date: 2025-01-04 22:59:57.376000+00:00
 url: https://www.lesswrong.com/posts/4CmYSPc4HfRfWxCLe/parkinson-s-law-and-the-ideology-of-statistics-1
 novelty: 0.6774583882987633

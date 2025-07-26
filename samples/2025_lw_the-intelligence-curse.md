@@ -1,5 +1,5 @@
 ---
-title: The Intelligence Curse
+title: "The Intelligence Curse"
 date: 2025-01-04 18:16:58.921000+00:00
 url: https://www.lesswrong.com/posts/Mak2kZuTq8Hpnqyzb/the-intelligence-curse
 novelty: 0.6880437127968582

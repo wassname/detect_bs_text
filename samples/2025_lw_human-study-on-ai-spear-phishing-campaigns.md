@@ -1,5 +1,5 @@
 ---
-title: Human study on AI spear phishing campaigns
+title: "Human study on AI spear phishing campaigns"
 date: 2025-01-03 19:03:28.406000+00:00
 url: https://www.lesswrong.com/posts/GCHyDKfPXa5qsG2cP/human-study-on-ai-spear-phishing-campaigns
 novelty: 0.6774583882987633
