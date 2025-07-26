@@ -1,53 +1,42 @@
-[tool.poetry]
-name = "bs_writing_detector"
+[project]
+name = "bs-writing-detector"
 version = "0.1.0"
-description = "building a BS detector using perplexity"
-authors = ["wassname <git@wassname.org>"]
-license = "MIT"
+description = "Add your description here"
 readme = "README.md"
+authors = [
+    { name = "wassname", email = "1103714+wassname@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "anycache>=2.4.0",
+    "auto-gptq>=0.7.1",
+    "bitsandbytes>=0.46.1",
+    "datasets>=4.0.0",
+    "einops>=0.8.1",
+    "loguru>=0.7.3",
+    "matplotlib>=3.10.3",
+    "numpy>=2.3.2",
+    "openai>=1.97.1",
+    "pandas>=2.3.1",
+    "peft>=0.16.0",
+    "python-frontmatter>=1.1.0",
+    "tqdm>=4.67.1",
+    "transformers>=4.54.0",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<3.13"
-torch = {version = "^2.1.0+cu118", source = "pytorch"}
-tqdm = "^4.66.1"
-datasets = "^2.14.5"
-transformers = "^4.34.0"
-optimum = "^1.13.2"
-numpy = "^1.26.1"
-pandas = "^2.1.1"
-scikit-learn = "^1.3.1"
-bitsandbytes = ">=0.43.2"
-packaging = "^23.2"
-peft = "^0.7.1"
-evaluate = "^0.4.1"
-auto-gptq = "^0.6.0"
-openai = "^1.6.1"
-python-dotenv = "^1.0.0"
-einops = "^0.7.0"
-tabulate = "^0.9.0"
-lightning = "^2.1.3"
-matplotlib = "^3.8.0"
-python-frontmatter = "^1.0.1"
-loguru = "^0.7.2"
-anycache = "^2.2.0"
-ipywidgets = "^8.1.5"
-ipykernel = "^6.29.5"
-
-[[tool.poetry.source]]
-name = "pytorch"
-url = "https://download.pytorch.org/whl/cu118"
-priority = "explicit"
-
-
-[tool.poetry.group.dev.dependencies]
-ipykernel = "^6.25.2"
-black = "^23.10.0"
-pylama = "^8.4.1"
+[project.scripts]
+bs-writing-detector = "bs_writing_detector:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
 
-[virtualenvs]
-create = true
-in-project = true
+[tool.setuptools.packages.find]
+where = ["."]  # search the root directory
+include = ["bs_writing_detector*"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.0",
+    "ipywidgets>=8.1.7",
+]
