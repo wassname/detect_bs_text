@@ -5,10 +5,11 @@ import evaluate
 from evaluate import logging
 from torch.nn import CrossEntropyLoss
 import torch
+from transformers import DynamicCache
 import numpy as np
 
 def perplexity_compute(
-    data, model, tokenizer, batch_size: int = 16, add_start_token: bool = True, device=None, max_length=None
+    data, model, tokenizer, batch_size: int = 16, add_start_token: bool = True, device=None, max_length=None, context=""
 ):
 
     if device is not None:
@@ -44,10 +45,28 @@ def perplexity_compute(
     else:
         max_tokenized_len = max_length
 
+    kv_cache = DynamicCache()
+    if context is not None:
+        encodings_context = tokenizer(
+            context,
+            add_special_tokens=False,
+            # padding=True,
+            truncation=True if max_tokenized_len else False,
+            max_length=max_tokenized_len,
+            return_tensors="pt",
+            return_attention_mask=True,
+            return_dict=True,
+        ).to(device)
+        # start kv cache
+        model(
+            **encodings_context,
+            use_cache=True,
+            past_key_values=kv_cache,
+        )
     encodings = tokenizer(
         data,
         add_special_tokens=False,
-        padding=True,
+        # padding=True,
         truncation=True if max_tokenized_len else False,
         max_length=max_tokenized_len,
         return_tensors="pt",
@@ -69,12 +88,15 @@ def perplexity_compute(
     nlls = []
     loss_fct = CrossEntropyLoss(reduction="none")
 
+
+
+
     for start_index in range(0, len(encoded_texts), batch_size):
         end_index = min(start_index + batch_size, len(encoded_texts))
         encoded_batch = encoded_texts[start_index:end_index]
         attn_mask = attn_masks[start_index:end_index]
 
-        if add_start_token:
+        if add_start_token and start_index == 0:
             bos_tokens_tensor = torch.tensor([[tokenizer.bos_token_id]] * encoded_batch.size(dim=0)).to(device)
             encoded_batch = torch.cat([bos_tokens_tensor, encoded_batch], dim=1)
             attn_mask = torch.cat(
@@ -84,7 +106,9 @@ def perplexity_compute(
         labels = encoded_batch
 
         with torch.no_grad():
-            out_logits = model(encoded_batch, attention_mask=attn_mask).logits
+            out_logits = model(encoded_batch, attention_mask=attn_mask,
+                use_cache=True, past_key_values=kv_cache
+                               ).logits
 
         shift_logits = out_logits[..., :-1, :].contiguous()
         shift_labels = labels[..., 1:].contiguous()
