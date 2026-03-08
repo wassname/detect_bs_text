@@ -91,3 +91,6 @@ If this research contributes to your work, please acknowledge it by citing:
   commit = {}
 }
 ```
+
+UPDATE:
+I think a better approach might be to use influence functions such as: https://joemelko.github.io/blog.html?post=TopicReweighting these essentially meta learn a function to see how influential data would be if you did a larger and more expensive train.
